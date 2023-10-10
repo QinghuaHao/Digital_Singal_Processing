@@ -68,10 +68,9 @@ def Find_peaks_idx(separation_point_arr,freqs,amplitude):
         end_freq_idx = Find_idx_of_freq(freqs,separation_point_arr[i+1])
         peaks_idx.append(Find_one_peak_idx(start_freq_idx,end_freq_idx,amplitude))
     return np.asarray(peaks_idx)
-def Generate_rectangle(x_start_freq,x_end_freq,height,color):
+def Generate_rectangle(x_start_freq,x_end_freq,height,color,y_start=30):
     # 这个时候，x轴已经是频率了，输入多少就是多少
     x_start = x_start_freq
-    y_start = -30
     width = x_end_freq - x_start
 
     height = height*2
@@ -126,8 +125,8 @@ if __name__ == '__main__':
     # Here you can plot blocks to mark the frequency range
     # for example, now the blocks are from 100Hz-500Hz, 65Hz-1500Hz
     rectangles = []
-    rectangles.append(Generate_rectangle(100,500,max(Amplitude_dB),'green'))
-    rectangles.append(Generate_rectangle(65,1500,max(Amplitude_dB),'orange'))
+    rectangles.append(Generate_rectangle(100,500,max(Amplitude_dB),'green',-30))
+    rectangles.append(Generate_rectangle(65,1500,max(Amplitude_dB),'orange',-30))
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis 1cm
     f= plt.figure(figsize=(16,10),dpi=600)
@@ -145,13 +144,15 @@ if __name__ == '__main__':
         plt.gca().add_patch(rect)
     f.savefig(fname="./Amplitude_Frequency_1CM.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
 
-    #1M
-    rectangles_1m = []
-    rectangles_1m.append(Generate_rectangle(100,500,max(Amplitude_dB_1m),'green'))
-    rectangles_1m.append(Generate_rectangle(65,1500,max(Amplitude_dB_1m),'orange'))
+
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis
     f_1m= plt.figure(figsize=(16,10),dpi=600)
+    #1M
+    rectangles_1m = []
+    rectangles_1m.append(Generate_rectangle(100,500,max(Amplitude_dB_1m),'green',-20))
+    rectangles_1m.append(Generate_rectangle(65,1500,max(Amplitude_dB_1m),'orange',-20))
+
     plt.title("Amplitude Frequency 1M",fontsize = 26,loc="center")
     plt.xticks(fontsize=14,color='black')
     plt.yticks(fontsize=14,color="black")
