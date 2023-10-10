@@ -51,7 +51,7 @@ def Save_Voice(sample_rate,filter_sigs,path):
     return None
 
 if __name__ == '__main__':
-    sample_rate, audio = wf.read("/Users/haoqinghua/Desktop/1cm_voice.wav")  # add address of wav profile
+    sample_rate, audio = wf.read("./1cm_voice.wav")  # add address of wav profile
     print(sample_rate)
     print(audio.shape)
     times = np.arange(audio.size) / sample_rate
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     plt.ylabel("Amplitude(dB)",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray',axis="y")
     plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
-    f.savefig(fname="/Users/haoqinghua/Desktop/python/DSP/Amplitude_Frequency.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    f.savefig(fname="./Amplitude_Frequency.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
     #remove noise
     # remove_noise_audio = Remove_Noise(FFT_Audio_Result,21500)
     # denoise_audio = nf.ifft(remove_noise_audio).real
