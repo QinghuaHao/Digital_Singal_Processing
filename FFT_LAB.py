@@ -2,6 +2,7 @@ import numpy as np
 import numpy.fft as nf
 import scipy.io.wavfile as wf
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 #Normalization
 def Normalization(audio):
@@ -67,6 +68,14 @@ def Find_peaks_idx(separation_point_arr,freqs,amplitude):
         end_freq_idx = Find_idx_of_freq(freqs,separation_point_arr[i+1])
         peaks_idx.append(Find_one_peak_idx(start_freq_idx,end_freq_idx,amplitude))
     return np.asarray(peaks_idx)
+def Generate_rectangle(x_start_freq,x_end_freq,height,color):
+    # 这个时候，x轴已经是频率了，输入多少就是多少
+    x_start = x_start_freq
+    y_start = -30
+    width = x_end_freq - x_start
+
+    height = height*2
+    return Rectangle((x_start, y_start), width, height, fill=False, color=color)
 
 
 if __name__ == '__main__':
@@ -92,12 +101,18 @@ if __name__ == '__main__':
     #FFT
     FFT_Audio_Result ,FFT_Freqs = FFT_Audio(normal_amplitude,sample_rate)
     #DB
-    Amplitude_dB  = 10*np.log10(np.abs(FFT_Audio_Result))
+    Amplitude_dB = 10*np.log10(np.abs(FFT_Audio_Result))
 
     # Here you can find peaks in segments you given,
-    # for example, now the segments are 100-200, 200-400, 400-900
+    # for example, now the segments are 100Hz-200Hz, 200Hz-400Hz, 400Hz-900Hz
     test_sept = [100,200,400,900]
     peaks_idx = Find_peaks_idx(test_sept,FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+
+    # Here you can plot blocks to mark the frequency range
+    # for example, now the blocks are from 100Hz-500Hz, 65Hz-1500Hz
+    rectangles = []
+    rectangles.append(Generate_rectangle(100,500,max(Amplitude_dB),'green'))
+    rectangles.append(Generate_rectangle(65,1500,max(Amplitude_dB),'orange'))
 
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis
@@ -109,7 +124,11 @@ if __name__ == '__main__':
     plt.ylabel("Amplitude(dB)",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray',axis="y")
     plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+    #mark vowels peaks
     plt.scatter(FFT_Freqs[peaks_idx], Amplitude_dB[peaks_idx], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
+    # Mark the frequency range contains the consonants/ harmonics
+    for rect in rectangles:
+        plt.gca().add_patch(rect)
     f.savefig(fname="./Amplitude_Frequency.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
     #remove noise
     # remove_noise_audio = Remove_Noise(FFT_Audio_Result,21500)
