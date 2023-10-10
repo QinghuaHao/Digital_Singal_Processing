@@ -2,8 +2,6 @@ import numpy as np
 import numpy.fft as nf
 import scipy.io.wavfile as wf
 import matplotlib.pyplot as plt
-from scipy.signal import spectrogram
-import scipy.signal as signal
 
 #Normalization
 def Normalization(audio):
