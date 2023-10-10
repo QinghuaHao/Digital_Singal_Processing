@@ -9,8 +9,7 @@ def fft_transform(audio,sample_rate):
     return fft_audio,fft_freqs
 def remove_noise(fft_audio,threshold):
     fft_audio[np.abs(fft_audio)>threshold]=0
-    fft_audio_new = fft_audio
-    return fft_audio_new
+    return fft_audio
 def ifft_transform(fft_audio):
     denoise_audio = nf.ifft(fft_audio).real
     return denoise_audio
