@@ -6,7 +6,11 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/DSP.iml
-/misc.xml
-/modules.xml
-/inspectionProfiles/profiles_settings.xml
+DSP.iml
+ideamisc.xml
+modules.xml
+vcs.xml
+profiles_settings.xml
+modules.xml
+misc.xml
+.gitignore
