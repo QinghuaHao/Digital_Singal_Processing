@@ -50,6 +50,25 @@ def Save_Voice(sample_rate,filter_sigs,path):
     wf.write(path, sample_rate, filter_sigs)
     return None
 
+# Find the index closest to the frequency given
+def Find_idx_of_freq(freqs,target_freq): #完成
+    abs_diff = np.abs(freqs - target_freq)
+    return np.argmin(abs_diff)
+
+# Find the index of peak in amplitude
+def Find_one_peak_idx(start_freq_idx,end_freq_idx,amplitude):
+    return np.argmax(amplitude[start_freq_idx:end_freq_idx])+start_freq_idx
+
+# according to the frequencies given, split the frequency spectrum into segments
+def Find_peaks_idx(separation_point_arr,freqs,amplitude):
+    peaks_idx = []
+    for i in range(len(separation_point_arr)-1):
+        start_freq_idx = Find_idx_of_freq(freqs,separation_point_arr[i])
+        end_freq_idx = Find_idx_of_freq(freqs,separation_point_arr[i+1])
+        peaks_idx.append(Find_one_peak_idx(start_freq_idx,end_freq_idx,amplitude))
+    return np.asarray(peaks_idx)
+
+
 if __name__ == '__main__':
     sample_rate, audio = wf.read("./1cm_voice.wav")  # add address of wav profile
     print(sample_rate)
@@ -74,7 +93,12 @@ if __name__ == '__main__':
     FFT_Audio_Result ,FFT_Freqs = FFT_Audio(normal_amplitude,sample_rate)
     #DB
     Amplitude_dB  = 10*np.log10(np.abs(FFT_Audio_Result))
-    # peaks, _ = find_peaks(np.abs(FFT_Audio_Result), height=10**12)
+
+    # Here you can find peaks in segments you given,
+    # for example, now the segments are 100-200, 200-400, 400-900
+    test_sept = [100,200,400,900]
+    peaks_idx = Find_peaks_idx(test_sept,FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis
     f= plt.figure(figsize=(16,10),dpi=600)
@@ -85,6 +109,7 @@ if __name__ == '__main__':
     plt.ylabel("Amplitude(dB)",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray',axis="y")
     plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+    plt.scatter(FFT_Freqs[peaks_idx], Amplitude_dB[peaks_idx], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
     f.savefig(fname="./Amplitude_Frequency.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
     #remove noise
     # remove_noise_audio = Remove_Noise(FFT_Audio_Result,21500)
