@@ -25,34 +25,8 @@ def FFT_Audio(audio,sample_rate):
     fft_freqs = nf.fftfreq(len(audio),1/sample_rate)
     return fft_audio,fft_freqs
 
-#Improve Quality
-def Improve_Quality():
-    return
-
-#educe amplitudes
-def audio_compression(audio_data, threshold=0.2):
-    # compute amplitude
-    amplitude = np.abs(audio_data)
-    # educe amplitudes greater than the threshold
-    compressed_audio = np.where(amplitude > threshold, threshold, amplitude)
-    # Preserve the sign of the original signal
-    compressed_audio = compressed_audio * np.sign(audio_data)
-    return compressed_audio
-
-
-#Remove Noise by myself
-def Remove_Noise(fft_audio,threshold):
-    fft_audio[np.abs(fft_audio)>threshold] = 0
-    fft_audio_new = np.abs(fft_audio)
-    return fft_audio_new
-
-#Save Voice
-def Save_Voice(sample_rate,filter_sigs,path):
-    wf.write(path, sample_rate, filter_sigs)
-    return None
-
 # Find the index closest to the frequency given
-def Find_idx_of_freq(freqs,target_freq): #完成
+def Find_idx_of_freq(freqs,target_freq): #complete
     abs_diff = np.abs(freqs - target_freq)
     return np.argmin(abs_diff)
 
@@ -69,13 +43,10 @@ def Find_peaks_idx(separation_point_arr,freqs,amplitude):
         peaks_idx.append(Find_one_peak_idx(start_freq_idx,end_freq_idx,amplitude))
     return np.asarray(peaks_idx)
 def Generate_rectangle(x_start_freq,x_end_freq,height,color,y_start=30):
-    # 这个时候，x轴已经是频率了，输入多少就是多少
     x_start = x_start_freq
     width = x_end_freq - x_start
-
     height = height*2
     return Rectangle((x_start, y_start), width, height, fill=False, color=color)
-
 
 if __name__ == '__main__':
     sample_rate, audio = wf.read("./1cm_voice.wav")  # add address of wav profile
@@ -95,11 +66,10 @@ if __name__ == '__main__':
     plt.xlabel("Time(s)",fontsize=18)
     plt.ylabel("Signal",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray')
-    # plt.plot(times[int(times.size/4):3*int(times.size/4)],normalized_audio[int(times.size/4):3*int(times.size/4)],c="orangered",label="Noised")
     plt.plot(times, normal_amplitude)
     time_domin_picture.savefig(fname="./Time_Domin_1cm.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
 
-    #Plot1_Matplotlib_Time_domin_picture_1m
+    # Plot1_Matplotlib_Time_domin_picture_1m
     time_domin_picture_1m = plt.figure(figsize=(16,10),dpi=600)
     plt.title("Time Domain 1m", fontsize=26)
     plt.xticks(fontsize=14,color='black')
@@ -108,7 +78,7 @@ if __name__ == '__main__':
     plt.ylabel("Signal",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray')
     plt.plot(times_1m, normal_amplitude_1m)
-    time_domin_picture_1m.savefig(fname="./Time_Domin_1m.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    # time_domin_picture_1m.savefig(fname="./Time_Domin_1m.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
 
     #FFT
     FFT_Audio_Result ,FFT_Freqs = FFT_Audio(normal_amplitude,sample_rate)
@@ -125,8 +95,8 @@ if __name__ == '__main__':
     # Here you can plot blocks to mark the frequency range
     # for example, now the blocks are from 100Hz-500Hz, 65Hz-1500Hz
     rectangles = []
-    rectangles.append(Generate_rectangle(100,500,max(Amplitude_dB),'green',-30))
-    rectangles.append(Generate_rectangle(65,1500,max(Amplitude_dB),'orange',-30))
+    rectangles.append(Generate_rectangle(100,8000,max(Amplitude_dB),'green',-30))
+    rectangles.append(Generate_rectangle(85,8000,max(Amplitude_dB),'orange',-30))
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis 1cm
     f= plt.figure(figsize=(16,10),dpi=600)
@@ -144,15 +114,12 @@ if __name__ == '__main__':
         plt.gca().add_patch(rect)
     f.savefig(fname="./Amplitude_Frequency_1CM.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
 
-
-
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis
     f_1m= plt.figure(figsize=(16,10),dpi=600)
     #1M
     rectangles_1m = []
-    rectangles_1m.append(Generate_rectangle(100,500,max(Amplitude_dB_1m),'green',-20))
-    rectangles_1m.append(Generate_rectangle(65,1500,max(Amplitude_dB_1m),'orange',-20))
-
+    rectangles_1m.append(Generate_rectangle(100,8000,max(Amplitude_dB_1m),'green',-30))
+    rectangles_1m.append(Generate_rectangle(85,8000,max(Amplitude_dB_1m),'orange',-30))
     plt.title("Amplitude Frequency 1M",fontsize = 26,loc="center")
     plt.xticks(fontsize=14,color='black')
     plt.yticks(fontsize=14,color="black")
@@ -165,8 +132,5 @@ if __name__ == '__main__':
     # Mark the frequency range contains the consonants/ harmonics
     for rect in rectangles_1m:
         plt.gca().add_patch(rect)
-    f_1m.savefig(fname="./Amplitude_Frequency_1m.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
-    #remove noise
-    # remove_noise_audio = Remove_Noise(FFT_Audio_Result,21500)
-    # denoise_audio = nf.ifft(remove_noise_audio).real
-    # wf.write('/Users/haoqinghua/Downloads/4.wav', sample_rate, denoise_audio)
+    f_1m.savefig(fname="./Amplitude_Frequency_1M.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+
