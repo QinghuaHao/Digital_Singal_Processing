@@ -7,8 +7,13 @@ def fft_transform(audio,sample_rate):
     fft_freqs = nf.fftfreq(len(audio),1/sample_rate)
     fft_audio = nf.fft(audio)
     return fft_audio,fft_freqs
-def remove_noise(fft_audio,b,threshold):
-    fft_audio[(np.abs(fft_audio)<b)&(np.abs(fft_audio)>threshold)]=0
+# def remove_noise(fft_audio,b,threshold):
+#     fft_audio[(np.abs(fft_audio) < b) & (np.abs(fft_audio) > threshold)] = 0
+#     return fft_audio
+
+def remove_noise(fft_freqs,fft_audio,b,threshold):
+    fft_audio[fft_freqs < b] = 0
+    fft_audio[fft_freqs > threshold] = 0
     return fft_audio
 
 
@@ -20,8 +25,8 @@ if __name__ == '__main__':
     fft_audio_1cm , fft_freqs_1cm = fft_transform(audio_1cm,sample_rate_1cm)
     fft_audio_1m ,fft_freqs_1m = fft_transform(audio_1m,sample_rate_1m)
 
-    nonoise_audio_1cm = remove_noise(fft_audio_1cm,85,8000)
-    nonoise_audio_1m = remove_noise(fft_audio_1m,85,8000)
+    nonoise_audio_1cm = remove_noise(fft_freqs_1cm,fft_audio_1cm,85,7000)
+    nonoise_audio_1m = remove_noise(fft_freqs_1m,fft_audio_1m,85,10000)
 
     nonoise_audio_singal_1cm = nf.ifft(nonoise_audio_1cm)
     final_audio_singal_1m = nf.ifft(nonoise_audio_1m)

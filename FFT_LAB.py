@@ -46,7 +46,7 @@ def Generate_rectangle(x_start_freq,x_end_freq,height,color,y_start=30):
     x_start = x_start_freq
     width = x_end_freq - x_start
     height = height*2
-    return Rectangle((x_start, y_start), width, height, fill=False, color=color)
+    return Rectangle((x_start, y_start), width, height, fill=False, color=color, linewidth=4)
 
 if __name__ == '__main__':
     sample_rate, audio = wf.read("./1cm_voice.wav")  # add address of wav profile
@@ -88,8 +88,8 @@ if __name__ == '__main__':
     Amplitude_dB_1m = 10*np.log10(np.abs(FFT_Audio_Result_1m))
 
     # Here you can find peaks in segments you given,
-    # for example, now the segments are 100Hz-200Hz, 200Hz-400Hz, 400Hz-900Hz
-    test_sept = [100,200,400,900]
+    # for example, now the segments are 85Hz-180Hz, 180Hz-400Hz, 400Hz-900Hz
+    test_sept = [85,140,250,400,900]
     peaks_idx = Find_peaks_idx(test_sept,FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
     peaks_idx_1m = Find_peaks_idx(test_sept,FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
     # Here you can plot blocks to mark the frequency range
@@ -133,4 +133,3 @@ if __name__ == '__main__':
     for rect in rectangles_1m:
         plt.gca().add_patch(rect)
     f_1m.savefig(fname="./Amplitude_Frequency_1M.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
-
