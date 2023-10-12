@@ -89,14 +89,14 @@ if __name__ == '__main__':
 
     # Here you can find peaks in segments you given,
     # for example, now the segments are 85Hz-180Hz, 180Hz-400Hz, 400Hz-900Hz
-    test_sept = [85,140,250,400,900]
+    test_sept = [85,190,250,400,800]
     peaks_idx = Find_peaks_idx(test_sept,FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
     peaks_idx_1m = Find_peaks_idx(test_sept,FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
     # Here you can plot blocks to mark the frequency range
     # for example, now the blocks are from 100Hz-500Hz, 65Hz-1500Hz
     rectangles = []
-    rectangles.append(Generate_rectangle(100,8000,max(Amplitude_dB),'green',-30))
-    rectangles.append(Generate_rectangle(85,8000,max(Amplitude_dB),'orange',-30))
+    rectangles.append(Generate_rectangle(500,6500,max(Amplitude_dB),'green',-30))
+    rectangles.append(Generate_rectangle(85,6500,max(Amplitude_dB),'orange',-30))
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis 1cm
     f= plt.figure(figsize=(16,10),dpi=600)
@@ -107,19 +107,14 @@ if __name__ == '__main__':
     plt.ylabel("Amplitude(dB)",fontsize=18)
     plt.grid(ls='--', lw=1, c='gray',axis="y")
     plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
-    #mark vowels peaks
-    plt.scatter(FFT_Freqs[peaks_idx], Amplitude_dB[peaks_idx], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
-    # Mark the frequency range contains the consonants/ harmonics
-    for rect in rectangles:
-        plt.gca().add_patch(rect)
     f.savefig(fname="./Amplitude_Frequency_1CM.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
 
     #Plot_2_Amplitude (dB) vs frequency (Hz) using logarithmic scale in both axis
     f_1m= plt.figure(figsize=(16,10),dpi=600)
     #1M
     rectangles_1m = []
-    rectangles_1m.append(Generate_rectangle(100,8000,max(Amplitude_dB_1m),'green',-30))
-    rectangles_1m.append(Generate_rectangle(85,8000,max(Amplitude_dB_1m),'orange',-30))
+    rectangles_1m.append(Generate_rectangle(500,6500,max(Amplitude_dB_1m),'green',-30))
+    rectangles_1m.append(Generate_rectangle(85,6500,max(Amplitude_dB_1m),'orange',-30))
     plt.title("Amplitude Frequency 1M",fontsize = 26,loc="center")
     plt.xticks(fontsize=14,color='black')
     plt.yticks(fontsize=14,color="black")
@@ -128,8 +123,91 @@ if __name__ == '__main__':
     plt.grid(ls='--', lw=1, c='gray',axis="y")
     plt.semilogx(FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
     #mark vowels peaks
-    plt.scatter(FFT_Freqs_1m[peaks_idx_1m], Amplitude_dB_1m[peaks_idx_1m], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
-    # Mark the frequency range contains the consonants/ harmonics
-    for rect in rectangles_1m:
-        plt.gca().add_patch(rect)
     f_1m.savefig(fname="./Amplitude_Frequency_1M.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    #1cm_Task2_1
+    f_2= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1CM Vowels",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+    #mark vowels peaks
+    plt.scatter(FFT_Freqs[peaks_idx], Amplitude_dB[peaks_idx], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
+    f_2.savefig(fname="./Amplitude_Frequency_1CM_peaks.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    rectangles_1 = []
+    rectangles_2 = []
+    rectangles_1.append(Generate_rectangle(500,6500,max(Amplitude_dB),'green',-30))
+    rectangles_2.append(Generate_rectangle(85,6500,max(Amplitude_dB),'orange',-30))
+    #1cm_Task2_2
+    f_3= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1CM Consonants",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+    #mark vowels peaks
+    for rect in rectangles_1:
+        plt.gca().add_patch(rect)
+    f_3.savefig(fname="./Amplitude_Frequency_1CM_con.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    #1cm_Task2_3
+    f_4= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1CM Spectrum",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs[FFT_Freqs>0],Amplitude_dB[FFT_Freqs>0])
+    #mark vowels peaks
+    for rect in rectangles_2:
+        plt.gca().add_patch(rect)
+    f_4.savefig(fname="./Amplitude_Frequency_1CM_all.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    #1M_Task2_1
+    f_1m_1= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1M Vowels",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
+    #mark vowels peaks
+    plt.scatter(FFT_Freqs_1m[peaks_idx_1m], Amplitude_dB_1m[peaks_idx_1m], s=400, marker='o', facecolors='none', edgecolors='red', zorder=3)
+    f_1m_1.savefig(fname="./Amplitude_Frequency_1M_peaks.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+
+    rectangles_1m_1 = []
+    rectangles_1m_2 = []
+    rectangles_1m_1.append(Generate_rectangle(500,6500,max(Amplitude_dB_1m),'green',-30))
+    rectangles_1m_2.append(Generate_rectangle(85,6500,max(Amplitude_dB_1m),'orange',-30))
+    #1M_Task2_2
+    f_1m_2= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1M Consonants",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
+    #mark vowels peaks
+    # Mark the frequency range contains the consonants/ harmonics
+    for rect in rectangles_1m_1:
+        plt.gca().add_patch(rect)
+    f_1m_2.savefig(fname="./Amplitude_Frequency_1M_con.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
+    #1M_Task2_3
+    f_1m_3= plt.figure(figsize=(16,10),dpi=600)
+    plt.title("Amplitude Frequency 1M Spectrum",fontsize = 26,loc="center")
+    plt.xticks(fontsize=14,color='black')
+    plt.yticks(fontsize=14,color="black")
+    plt.xlabel("Frequency(Hz)",fontsize=18)
+    plt.ylabel("Amplitude(dB)",fontsize=18)
+    plt.grid(ls='--', lw=1, c='gray',axis="y")
+    plt.semilogx(FFT_Freqs_1m[FFT_Freqs_1m>0],Amplitude_dB_1m[FFT_Freqs_1m>0])
+    #mark vowels peaks
+    # Mark the frequency range contains the consonants/ harmonics
+    for rect in rectangles_1m_2:
+        plt.gca().add_patch(rect)
+    f_1m_3.savefig(fname="./Amplitude_Frequency_1M_all.png",dpi=600,bbox_inches = 'tight',pad_inches =1)
