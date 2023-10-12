@@ -8,8 +8,8 @@ def fft_transform(audio,sample_rate):
     fft_audio = nf.fft(audio)
     return fft_audio,fft_freqs
 
-def improve_voice_quality(fft_audio,star_freq,end_freq,a):
-    index = np.where((star_freq<np.abs(fft_audio))&(np.abs(fft_audio)<end_freq))
+def improve_voice_quality(fft_audio,fft_freqs,star_freq,end_freq,a):
+    index = np.where((star_freq<np.abs(fft_freqs))&(np.abs(fft_freqs)<end_freq))
     change_voice = fft_audio[index]*a
     fft_audio[index] = change_voice
     return fft_audio
@@ -23,8 +23,8 @@ if __name__ == '__main__':
     fft_audio_1cm , fft_freqs_1cm = fft_transform(audio_1cm,sample_rate_1cm)
     fft_audio_1m ,fft_freqs_1m = fft_transform(audio_1m,sample_rate_1m)
 
-    voice_1cm = improve_voice_quality(fft_audio_1cm,100,8000,5)
-    voice_1m = improve_voice_quality(fft_audio_1m,100,8000,8)
+    voice_1cm = improve_voice_quality(fft_audio_1cm,fft_freqs_1cm,100,6500,2)
+    voice_1m = improve_voice_quality(fft_audio_1m,fft_freqs_1m,100,7000,1.7)
 
     nonoise_audio_singal_1cm = nf.ifft(voice_1cm)
     final_audio_singal_1m = nf.ifft(voice_1m)

@@ -25,8 +25,8 @@ if __name__ == '__main__':
     fft_audio_1cm , fft_freqs_1cm = fft_transform(audio_1cm,sample_rate_1cm)
     fft_audio_1m ,fft_freqs_1m = fft_transform(audio_1m,sample_rate_1m)
 
-    nonoise_audio_1cm = remove_noise(fft_freqs_1cm,fft_audio_1cm,85,7000)
-    nonoise_audio_1m = remove_noise(fft_freqs_1m,fft_audio_1m,85,10000)
+    nonoise_audio_1cm = remove_noise(fft_freqs_1cm,fft_audio_1cm,100,6500)
+    nonoise_audio_1m = remove_noise(fft_freqs_1m,fft_audio_1m,85,6500)
 
     nonoise_audio_singal_1cm = nf.ifft(nonoise_audio_1cm)
     final_audio_singal_1m = nf.ifft(nonoise_audio_1m)
